@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2016 by thujone (http://jsbin.com/wehoha/23/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width">
+<title>ES6 Class Test</title>
+<style id="jsbin-css">
+button {
+  margin-left: 15px;
+}
+</style>
+</head>
+<body>
+
+  <select id="vehicle-type">
+    <option value="m" selected="selected">Motorcycle</option>
+    <option value="c">Car</option>
+  </select>
+  <input id="vehicle-name" type="text" />
+  <button id="add-button">Add Vehicle</button>
+
+  <ul id="vehicle-list"></ul>
+<script>
+(function() {
+  class Vehicle {
+    constructor(name, wheels, seats) {
+        this._name   = name;
+        this._wheels = wheels;
+        this._seats  = seats;
+    }
+
+    getName() {
+        return this._name;
+    }
+
+    setName(name) {
+        this._name = name;
+    }
+
+    get wheels() {
+        return this._wheels;
+    }
+
+    set wheels(wheels) {
+        this._wheels = wheels;
+    }
+
+    get seats() {
+        return this._seats;
+    }
+
+    set seats(seats) {
+        this._seats = seats;
+    }
+  }
+
+  class Car extends Vehicle {
+    constructor(name) {
+        super(name, 4, 2);
+    }
+    
+  }
+
+  class Motorcycle extends Vehicle {
+    constructor(name) {
+        super(name, 2, 1);
+    }
+  }
+
+  let vehicles = new Map(),
+      addButton = document.getElementById('add-button'),
+      vehicleType = document.getElementById('vehicle-type'),
+      vehicleName = document.getElementById('vehicle-name');
+  
+  addButton.addEventListener('click', function(event) {
+    let newVehicle,
+        vehicleList = document.getElementById('vehicle-list'),
+        newListItem = document.createElement('li');
+    
+    if (vehicleName.value === '') return;
+   
+    if (vehicleType.value === 'm') {
+      newVehicle = new Motorcycle(vehicleName.value);
+    } else if (vehicleType.value === 'c') {
+      newVehicle = new Car(vehicleName.value);
+    }
+    
+    newListItem.innerHTML = newVehicle.getName();
+    newListItemButton = document.createElement('button');
+    newListItemButton.innerText = "Info";
+    newListItemButton.setAttribute('data-name', newVehicle.getName());
+    newListItem.appendChild(newListItemButton);
+    vehicleList.appendChild(newListItem);
+    
+    vehicleName.value = '';
+    vehicles.set(newVehicle.getName(), newVehicle);
+    
+    newListItemButton.addEventListener('click', function(e) {
+      let vehicle = vehicles.get(e.target.getAttribute('data-name'));
+      let logText = `I am ${vehicle.getName()}, a ${vehicle.constructor.name} ` +
+                    `with ${vehicle.wheels} wheels and ${vehicle.seats} seat(s)`;
+      console.log(logText);
+    });
+ 
+  });
+  
+
+})();
+</script>
+
+</body>
+</html>
